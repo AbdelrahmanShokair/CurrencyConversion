@@ -4,7 +4,6 @@ import com.example.currencyconversion.dto.ConversionDto;
 import com.example.currencyconversion.dto.CurrencyResponseDto;
 import com.example.currencyconversion.dto.RateDto;
 
-import java.io.Serializable;
 import java.util.List;
 
 public interface CurrencyConversionService {

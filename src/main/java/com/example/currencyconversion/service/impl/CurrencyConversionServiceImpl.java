@@ -13,11 +13,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = {"CurrencyConversion"})
 public class CurrencyConversionServiceImpl implements CurrencyConversionService {
     private final CurrencyConversionClient currencyConversionClient;
 
@@ -38,11 +40,13 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
         }).toList();
     }
     @Override
+    @Cacheable(value = "getAllCurrencies",key = "#root.methodName")
     public List<CurrencyResponseDto> getAllCurrencies() {
         return Arrays.stream(Currency.values())
                 .map(currency -> new CurrencyResponseDto(currency.getCode(), currency.getFlagUrl(), currency.getDesc())).toList();
     }
     @Override
+    @Cacheable(value = "getAllRates",key = "#from")
     public List<RateDto> getAllRates(String from, List<String> to) {
         String responseBody = currencyConversionClient.getAllRates(from);
         JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
